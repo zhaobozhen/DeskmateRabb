@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PussTheme" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/pussPrimary</item>
+        <item name="colorPrimaryDark">@color/pussPrimaryDark</item>
+        <item name="colorAccent">@color/pussAccent</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="RabbTheme" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/rabbPrimary</item>
+        <item name="colorPrimaryDark">@color/rabbPrimaryDark</item>
+        <item name="colorAccent">@color/rabbAccent</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="SettingsTheme" parent="AppTheme" />
+</resources>
