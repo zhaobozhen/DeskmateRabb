@@ -14,5 +14,5 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="SettingsTheme" parent="AppTheme" />
+    <style name="SettingsTheme" parent="WhiteTheme" />
 </resources>

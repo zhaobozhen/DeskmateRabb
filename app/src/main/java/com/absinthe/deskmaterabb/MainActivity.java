@@ -1,27 +1,25 @@
 package com.absinthe.deskmaterabb;
 
-import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.absinthe.deskmaterabb.fragment.PussFragment;
 import com.absinthe.deskmaterabb.fragment.RabbFragment;
 import com.absinthe.deskmaterabb.fragment.SettingsFragment;
+import com.absinthe.deskmaterabb.utils.ChangeColorsUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.text.Html;
 import android.view.MenuItem;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,7 +29,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private ViewPager mViewpager;
     private BottomNavigationView navigation;
-    private List<Fragment> fragmentList  =new ArrayList<Fragment>();
+    private List<Fragment> fragmentList  = new ArrayList<>();
+    private Toolbar toolbar;
+    private Window window;
+    private TextView title;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -72,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 return fragmentList.size();
             }
         });
+
+        toolbar = findViewById(R.id.toolbar);
+        window = this.getWindow();
+        title = findViewById(R.id.title);
     }
 
     @Override
@@ -79,18 +84,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onPageSelected(int position) {
         navigation.getMenu().getItem(position).setChecked(true);
         switch (position) {
             case 0:
-                changeActionBarColor(R.style.PussTheme);
+                ChangeColorsUtil.changeActionBarColor(this, window, toolbar, R.style.PussTheme);
+                ChangeColorsUtil.changeActionbarAndStatusTextColor(window, title, ChangeColorsUtil.WHITE);
+                ChangeColorsUtil.changeBottomNavigationBarColor(this, navigation, R.style.PussTheme);
                 break;
             case 1:
-                changeActionBarColor(R.style.RabbTheme);
+                ChangeColorsUtil.changeActionBarColor(this, window, toolbar, R.style.RabbTheme);
+                ChangeColorsUtil.changeActionbarAndStatusTextColor(window, title, ChangeColorsUtil.WHITE);
+                ChangeColorsUtil.changeBottomNavigationBarColor(this, navigation, R.style.RabbTheme);
                 break;
             case 2:
-                changeActionBarColor(R.style.SettingsTheme);
+                ChangeColorsUtil.changeActionBarColor(this, window, toolbar, R.style.SettingsTheme);
+                ChangeColorsUtil.changeActionbarAndStatusTextColor(window, title, ChangeColorsUtil.BLACK);
                 break;
         }
     }
@@ -103,68 +114,5 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
-
-    private void changeActionBarColor(int inThemeId) {
-        ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-            String primaryColor;
-            String primaryColorDark;
-            String actionBarTextColor;
-
-            primaryColor = this.getThemePrimaryColor(inThemeId);
-            primaryColorDark = this.getThemePrimaryColorDark(inThemeId);
-            actionBarTextColor = this.getThemeActionBarTextColor(inThemeId);
-
-            if (primaryColor != null && primaryColor.length() > 0) {
-                actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(primaryColor)));
-            }
-
-            if (primaryColorDark != null && primaryColorDark.length() > 0) {
-                Window window = this.getWindow();
-
-                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(Color.parseColor(primaryColorDark));
-            }
-
-            if (actionBarTextColor != null && actionBarTextColor.length() > 0) {
-                actionBar.setTitle(Html.fromHtml("<font color='#FFFFFF'>" + getString(R.string.app_name) + "</font>"));
-            }
-        }
-    }
-
-    private String getThemePrimaryColor(int inThemeId) {
-        String result;
-        int[] attrs = {R.attr.colorPrimary};
-        TypedArray typedArray = obtainStyledAttributes(inThemeId, attrs);
-
-        result = typedArray.getString(0);
-        typedArray.recycle();
-
-        return result;
-    }
-
-    private String getThemePrimaryColorDark(int inThemeId) {
-        String result;
-        int[] attrs = {R.attr.colorPrimaryDark};
-        TypedArray typedArray = obtainStyledAttributes(inThemeId, attrs);
-
-        result = typedArray.getString(0);
-        typedArray.recycle();
-
-        return result;
-    }
-
-    private String getThemeActionBarTextColor(int inThemeId) {
-        String result;
-        int[] attrs = {R.attr.textColor};
-        TypedArray typedArray = obtainStyledAttributes(inThemeId, attrs);
-
-        result = typedArray.getString(0);
-        typedArray.recycle();
-
-        return result;
     }
 }
